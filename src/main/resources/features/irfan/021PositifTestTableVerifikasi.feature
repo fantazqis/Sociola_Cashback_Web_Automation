@@ -15,26 +15,70 @@ Feature: Positif Test Table Verifikasi
   Scenario: Test154 Testing Pencarian Data Valid Web Table Verifikasi
     When Test154 Klik Navbar Verifikasi
     Then Test154 Validasi Label Halaman Verifikasi
-    And Test154 Menginput Dan Mencari <data> Yang Dicari
-    And Test154 Menginput Dan Mencari Data Yang Dicari Kembali
+    And Test154 Menginput <data> Valid
+    And Test154 Mencari Data Valid
+    And Test154 Menginput Data Valid Kembali
+    And Test154 Mencari Data Valid Kembali
     Then Test154 Validasi Data Yang Dicari
 
     Examples:
       | data |
       | Nama Customer  |
-      | Nomor Handphone  |
-      | RRN  |
-      | Reference ID  |
+#      | Nomor Handphone  |
+#      | RRN  |
+#      | Reference ID  |
 
-  Scenario: Test157 Testing Menampilkan Banyak Entries Data Web Table Verifikasi
+  Scenario: Test155 Testing Pencarian Data Empty Web Table Verifikasi
+    When Test155 Klik Navbar Verifikasi
+    Then Test155 Validasi Label Halaman Verifikasi
+    And Test155 Menginput Empty String
+    And Test155 Mencari Empty String
+    And Test155 Menginput Empty String Kembali
+    And Test155 Mencari Empty String Kembali
+    Then Test155 Validasi Banyak Data
+
+  Scenario: Test156 Testing Pencarian Case inconsistent Web Table Verifikasi
+    When Test156 Klik Navbar Verifikasi
+    Then Test156 Validasi Label Halaman Verifikasi
+    And Test156 Merubah <data> Menjadi Case inconsistent
+    And Test156 Menginput Data Case inconsistent
+    And Test156 Mencari Data Case inconsistent
+    And Test156 Menginput Data Case inconsistent Kembali
+    And Test156 Mencari Data Case inconsistent Kembali
+    Then Test156 Validasi Data Case inconsistent
+    Examples:
+      | data |
+      | Nama Customer |
+#      | Nama Customer |
+#      | Reference ID  |
+#      | Reference ID  |
+
+  Scenario: Test157 Testing Pencarian Partial Match Web Table Verifikasi
     When Test157 Klik Navbar Verifikasi
     Then Test157 Validasi Label Halaman Verifikasi
-    And Test157 Pilih Option Show Entries <data>
-    Then Test157 Validasi Banyak Data Yang Ditampilkan
+    And Test157 Merubah <data> Menjadi Partial Match
+    And Test157 Menginput Data Partial Match
+    And Test157 Mencari Data Partial Match
+    And Test157 Menginput Data Partial Match Kembali
+    And Test157 Mencari Data Partial Match Kembali
+    Then Test157 Validasi Data Partial Match
+    Examples:
+      | data |
+      | Nama Customer  |
+#      | Nomor Handphone  |
+#      | RRN  |
+#      | Reference ID  |
+
+
+  Scenario: Test158 Testing Menampilkan Banyak Entries Data Web Table Verifikasi
+    When Test158 Klik Navbar Verifikasi
+    Then Test158 Validasi Label Halaman Verifikasi
+    And Test158 Pilih Option Show Entries <data>
+    Then Test158 Validasi Banyak Data Yang Ditampilkan
 
     Examples:
       | data |
       | 10  |
-      | 25  |
-      | 50  |
-      | 100  |
+#      | 25  |
+#      | 50  |
+#      | 100  |

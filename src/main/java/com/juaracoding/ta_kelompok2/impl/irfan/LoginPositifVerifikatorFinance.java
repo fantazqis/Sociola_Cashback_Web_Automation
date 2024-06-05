@@ -30,34 +30,6 @@ public class LoginPositifVerifikatorFinance {
     private static ExtentTest extentTest;
     private LoginPage loginPage ;
     private Navbar navbar;
-//
-//    @BeforeTest
-//    public void initCase(){
-//        DriverSingleton.getInstance(Constants.FIREFOX);
-//        driver = DriverSingleton.getDriver();
-//        driver.get(Constants.URL_LOGIN);
-//        loginPage = new LoginPage(driver);
-//        navbar = new Navbar(driver);
-//    }
-//
-//    @Test(priority = 0)
-//    public void validLogin(){
-//        System.out.println("Valid Login Run");
-//        loginPage.clearLoginForm();
-//        loginPage.inputTextFieldInputUsername("admintiara2");
-//        loginPage.inputTextFieldInputPassword("a");
-//        loginPage.clickBtnLoginSubmit();
-//        GlobalFunction.delay(2);
-//        String validation = navbar.yNavbarBrandingValidation();
-//        System.out.println(validation);
-//        navbar.yClickBtnLogout();
-//        String validationLogin = loginPage.yGetTextLoginValidation();
-//        System.out.println(validationLogin);
-//
-//        System.out.println("Valid Login End");
-//
-//    }
-
 
     public LoginPositifVerifikatorFinance(){
         this.driver = VerifikatorFinanceOutlineHooks.driver;

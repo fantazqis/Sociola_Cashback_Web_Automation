@@ -9,22 +9,57 @@ Created on 27/05/2024 20:05
 Version 1.0
 */
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class DataOGenerator {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter a number: ");
-        int num = scanner.nextInt();
+        int numOnes;
+        do {
+            System.out.print("Enter how many number 1: ");
+            numOnes = scanner.nextInt();
+        } while (numOnes <= 0);
 
-        // Print the number "1" repeatedly based on the input
-        for (int i = 0; i < num; i++) {
-            System.out.print("1");
-            if (i < num - 1) {  // Add comma for all except the last number
-                System.out.print(",");
+        ArrayList<int[]> exceptions = new ArrayList<>();
+        while (true) { // Loop until user exits
+            System.out.print("Is there exception: (yes/no) ");
+            String answer = scanner.next();
+
+            if (answer.equalsIgnoreCase("no")) {
+                break;
+            }
+
+            // Get exception details
+            System.out.print("Where: ");
+            int exceptionIndex = scanner.nextInt();
+            System.out.print("How many data: ");
+            int exceptionValue = scanner.nextInt();
+
+            exceptions.add(new int[]{exceptionIndex, exceptionValue});
+        }
+
+        // Print the sequence with exceptions
+        printSequence(numOnes, exceptions);
+
+        scanner.close();
+    }
+
+    public static void printSequence(int numOnes, ArrayList<int[]> exceptions) {
+        for (int i = 1; i <= numOnes; i++) {
+            boolean isException = false;
+            for (int[] exception : exceptions) {
+                if (i == exception[0]) {
+                    System.out.print(exception[1] + ", ");
+                    isException = true;
+                    break;
+                }
+            }
+            if (!isException) {
+                System.out.print("1, ");
             }
         }
-        System.out.println();  // Print a newline after each iteration
+        System.out.println();
     }
 }

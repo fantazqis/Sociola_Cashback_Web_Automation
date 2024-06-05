@@ -12,21 +12,16 @@ Version 1.0
 import com.juaracoding.ta_kelompok2.connection.Constants;
 import com.juaracoding.ta_kelompok2.connection.DriverSingleton;
 import com.juaracoding.ta_kelompok2.util.GlobalFunction;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class VerifikasiPage {
     WebDriver driver;
@@ -95,8 +90,8 @@ public class VerifikasiPage {
     @FindBy(xpath = "//i[@class='fa fa-eye']")
     private WebElement btnVerifikasiAksi;
 
-//    @FindBy(xpath = "//td[@class='dataTables_empty']")
-//    private WebElement textRegisterDataTableEmpty;
+    @FindBy(xpath = "//td[@class='dataTables_empty']")
+    private WebElement textVerifikasiDataTableEmpty;
 
     @FindBy(xpath = "//div[@id='table_info']")
     private WebElement textVerifikasiDataTableEntriesInfo;
@@ -283,11 +278,25 @@ public class VerifikasiPage {
     @FindBy(xpath = "//span[@class='fa fa-pencil-alt']")
     private WebElement btnFormEdit;
 
+    @FindBy(xpath = "//button[@id='btnUpdate']")
+    private  WebElement btnFormSimpan;
+
+    @FindBy(xpath = "//button[@id='btnCancelUpdate']")
+    private WebElement btnFormCancel;
+
     @FindBy(xpath = "//button[@id='btnVerifikasi']")
     private WebElement btnFormVerifikasi;
 
+    @FindBy(css = "button.btn.btn-primary.confirm[disabled]")
+    private WebElement btnDisabledFormVerifikasi;
+
     @FindBy(xpath = "//button[@id='btnNote']")
     private WebElement btnFormSaveNote;
+    @FindBy(css = "button.btn.btn-warning.note[disabled='']")
+    private WebElement btnDisabledFormSaveNote;
+
+    @FindBy(xpath = "/html/body/div[1]/div/div/div[3]/button[1]")
+    private WebElement btnModal2Submit;
 
 
 
@@ -338,6 +347,63 @@ public class VerifikasiPage {
      * @throws IllegalStateException
      */
 
+    public List yGetAllDataTableData(){
+
+
+        List<String> allTableData = new ArrayList<>();
+        int startIndex = 1;
+        int endIndex = 6;
+
+        List<WebElement> rows = idVerifikasiWebTable.findElements(By.tagName("tr"));
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+            if (cells.size() >= endIndex) {
+                for (int i = startIndex; i < endIndex; i++) {
+                    WebElement cell = cells.get(i);
+                    String cellText = cell.getText();
+                    allTableData.add(cellText);
+                }
+            } else {
+                // Handle scenario where row has less than expected cells (optional)
+                System.out.println("Row with insufficient cells found. Skipping...");
+            }
+        }
+        return allTableData;
+    }
+
+    public boolean yGetAllDataTableDataCompare(List allTableData)
+    {
+        List<WebElement> rows = idVerifikasiWebTable.findElements(By.tagName("tr"));
+        int i = 0;
+        int startIndex = 2;
+        int endIndex = 6;
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+                if (cells.size() >= endIndex) {
+                    for (int j = startIndex; j < endIndex; j++) {
+                        WebElement cell = cells.get(j);
+                        String currentCellText = cell.getText();
+                        System.out.println("perbandingan data: " + allTableData.get(i) + " dengan " + currentCellText);
+                        if (!allTableData.get(i).equals(currentCellText)) {
+                            System.out.println("Validation failed! Expected: " + allTableData.get(i) + ", Actual: " + currentCellText);
+                            return false;
+
+                        }
+                        i++;
+
+                    }
+
+                } else {
+                    // Handle scenario where row has less than expected cells (optional)
+                    System.out.println("Row with insufficient cells found. Skipping...");
+                }
+            break;
+
+        }
+        System.out.println("masuk true");
+        return true;
+    }
+
     public String yGetRandomTableDataString(String dataToGet) {
         List<String> tableData = new ArrayList<>();
 
@@ -375,49 +441,74 @@ public class VerifikasiPage {
         // Generate a random index within the list bounds
         Random random = new Random();
         int randomIndex = random.nextInt(tableData.size());
-//
-//        System.out.println("ini row");
-//
-//        for (WebElement ele:allRows)
-//        {
-//            String value = ele.getText();
-//            System.out.println(value);
-//        }
-//
-//        System.out.println("ini tabledata" + tableData.get(randomIndex));
-//        System.out.println("Extracted data from the second column:");
-//        for (String data : tableData) {
-//            System.out.println(data);
-//        }
+
         return tableData.get(randomIndex);
     }
 
-    public boolean yGetValidationDataTable(String dataToGet) {
+    public boolean yGetValidationDataTable(String dataTovalidate, String process) {
         // Improved XPath for table with dynamic row count
         List<WebElement> allData = driver.findElements(By.xpath("//table[@id='table']//td"));
 
         boolean dataStatus = false;
-        for (WebElement data : allData) {
-            String value = data.getText();
-            System.out.println(value);
-            if (value.contains(dataToGet))
-            {
-                dataStatus = true;
-                break;
+        if (process == "valid" || process == "partial") {
+            for (WebElement data : allData) {
+                String value = data.getText();
+                System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                if (value.contains(dataTovalidate)) {
+                    System.out.println("found " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                    dataStatus = true;
+                    break;
+                }
+            }
+        } else if (process == "inconsistent") {
+            for (WebElement data : allData) {
+                String value = data.getText();
+                System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                if (value.toLowerCase().contains(dataTovalidate.toLowerCase())) {
+                    System.out.println("Found " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                    dataStatus = true;
+                    break;
+                }
             }
         }
-
         return dataStatus;
     }
 
-    public void ySearchDataTableVerifikasi(String dataToSearch)
+    public String yGetInconsistentCase(String dataToGet) {
+        StringBuilder inconsistentData = new StringBuilder();
+        for (int i = 0; i < dataToGet.length(); i++) {
+            char character = dataToGet.charAt(i);
+            if (Character.isLetter(character)) {
+                if (i % 2 == 0) {
+                    inconsistentData.append(Character.toUpperCase(character));
+                } else {
+                    inconsistentData.append(Character.toLowerCase(character));
+                }
+            } else {
+                // Append non-letters (spaces) directly
+                inconsistentData.append(character);
+            }
+        }
+        return inconsistentData.toString();
+    }
+
+    public String yGetPartialMatch(String dataToGet){
+        if (dataToGet == null || dataToGet.isEmpty()) {
+            return ""; // Handle empty data gracefully
+        }
+        int halfLength = dataToGet.length() / 2;
+        return dataToGet.substring(halfLength, dataToGet.length());
+    }
+
+
+    public void yInputSearchBarVerifikasi(String dataToSearch)
     {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         try
         {
             new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
                     .until(ExpectedConditions.visibilityOf(textFieldVerifikasiSearchBar))
-                    .sendKeys(dataToSearch, Keys.ENTER);
+                    .sendKeys(dataToSearch);
         }
         catch (Exception e)
         {
@@ -425,7 +516,21 @@ public class VerifikasiPage {
         }
     }
 
-    public void ySelectOptionVerifikasiEntries(String selected) throws IllegalStateException {
+    public void ySendKeysEnter() {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldVerifikasiSearchBar))
+                    .sendKeys(Keys.ENTER);
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Text Field SearchBar Tidak Ditemukan !!");
+        }
+    }
+
+    public int ySelectOptionVerifikasiEntries(String selected) throws IllegalStateException {
 //        List<WebElement> options = new Select(selectVerifikasiEntriesPerPage).getOptions();
 //        WebElement desiredOption = options.stream()
 //                .filter(option -> option.getAttribute("value").equals("100"))
@@ -435,36 +540,25 @@ public class VerifikasiPage {
 //        desiredOption.click();
         Select select = new Select(selectVerifikasiEntriesPerPage);
         select.selectByValue(selected);
-//
-//        if (selected.equals("10")) {
-//            select.selectByValue("10");
-//        } else if (selected.equals("25")) {
-//            select.selectByValue("25");
-//        } else if (selected.equals("50")) {
-//            select.selectByValue("50");
-//        }else if (selected.equals("100")) {
-//            select.selectByValue("100");
-//        }
+
+        int validation = 0;
+        if (selected.equals("10")) {
+            validation = 10;
+        } else if (selected.equals("25")) {
+            validation = 25;
+        } else if (selected.equals("50")) {
+            validation = 50;
+        }else if (selected.equals("100")) {
+            validation = 100;
+        }
+
+        return validation;
     }
 
     public int yGetDataTableRowTotal() {
         int rowCount = driver.findElements(By.xpath("//table[@id=\"table\"]//tbody/tr")).size();
 
         return rowCount;
-    }
-
-    public void yClickBtnVerifikasiAksi()
-    {
-        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
-        try
-        {
-            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
-                    .until(ExpectedConditions.visibilityOf(btnVerifikasiAksi)).click();
-        }
-        catch (Exception e)
-        {
-            System.out.println("Komponen Tombol Login Submit Tidak Ditemukan !!");
-        }
     }
 
     public String yGetTextVerifikasiFormValidation()
@@ -481,18 +575,12 @@ public class VerifikasiPage {
         return textVerifikasiPageTitle==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
                 .until(ExpectedConditions.visibilityOf(textVerifikasiPageTitle)).getText();
     }
+    public String yGetTextVerifikasiValidationNoData()
+    {
 
-    public void ySelectOptionVerifikasiFormQrisPay(String selected) throws IllegalStateException {
-        Select select = new Select(selectFormQrisPay);
-        select.selectByValue(selected);
+        return textVerifikasiDataTableEmpty==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textVerifikasiDataTableEmpty)).getText();
     }
-
-    public void ySelectOptionVerifikasiFormNamaMerchant(String selected) throws IllegalStateException {
-        Select select = new Select(selectFormNamaMerchant);
-        select.selectByValue(selected);
-    }
-
-
 
     /**
      * end - Fungsi Web Table Verifikasi
@@ -502,6 +590,603 @@ public class VerifikasiPage {
 
 
 
+    /**
+     * Fungsi Form Verifikasi
+     *
+     */
 
+    public void yClickButtonAksi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnVerifikasiAksi)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Aksi Table Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClearFormVerifikasi()
+    {
+
+
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            /** Set Field Password Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNamaNasabah)).clear();
+            /** Set Field Username Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNomorHandphone)).clear();
+            /** Set Field Username Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNomorRekening)).clear();
+            /** Set Field Username Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNominalTransaksi)).clear();
+            /** Set Field Username Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(dateFormTanggalTransaksi)).clear();
+            /** Set Field Username Empty String */
+
+            /** Set Field Username Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormRRN)).clear();
+
+            Select selectQRIS = new Select(selectFormQrisPay);
+            selectQRIS.selectByValue("");
+
+            Select selectMerchant = new Select(selectFormNamaMerchant);
+            selectMerchant.selectByValue("");
+
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void yInputTextFieldNamaNasabah(String namaNasabah)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNamaNasabah)).sendKeys(namaNasabah);
+        }catch (Exception e){
+            System.out.println("Komponen Text Field Input Nama Nasabah Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputTextFieldNomorHandphone(String nomorHandphone)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNomorHandphone)).sendKeys(nomorHandphone);
+        }catch (Exception e){
+            System.out.println("Komponen Text Field Input Nomor Handphone Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputTextFieldNomorRekening(String nomorRekening)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNomorRekening)).sendKeys(nomorRekening);
+        }catch (Exception e){
+            System.out.println("Komponen Text Field Input Nomor Rekening Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputSelectPembayaranQRIS(String pembayaranQRIS)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            Select select = new Select(selectFormQrisPay);
+            select.selectByValue(pembayaranQRIS);
+        }catch (Exception e){
+            System.out.println("Komponen Select Pembayaran QRIS Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputTextFieldNominalTransaksi(String nominalTransaksi)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNominalTransaksi)).sendKeys(nominalTransaksi);
+        }catch (Exception e){
+            System.out.println("Komponen Text Field Input Nominal Transaksi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputDatePickerTanggalTransaksi(String tanggalTransaksi)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(dateFormTanggalTransaksi)).sendKeys(tanggalTransaksi);
+        }catch (Exception e){
+            System.out.println("Komponen Date Picker Tanggal Transaksi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputSelectNamaMerchant(String namaMerchant)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(selectFormNamaMerchant)).sendKeys(namaMerchant);
+        }catch (Exception e){
+            System.out.println("Komponen Select Nama Merchant Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputTextFieldRRN(String rrn)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormRRN)).sendKeys(rrn);
+        }catch (Exception e){
+            System.out.println("Komponen Text Field Input RRN Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputImageBuktiTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalUploadFotoBuktiTransaksiSatu)).sendKeys(Constants.PATH_GAM_AWAL);
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputImageBuktiTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalUploadFotoBuktiTransaksiDua)).sendKeys(Constants.PATH_GAM_AWAL);
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yInputImageBuktiTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalUploadFotoBuktiTransaksiTiga)).sendKeys(Constants.PATH_GAM_AWAL);
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+
+    public void yUploadImageBuktiTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalSaveFotoBuktiTransaksiSatu)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yUploadImageBuktiTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalSaveFotoBuktiTransaksiDua)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yUploadImageBuktiTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModalSaveFotoBuktiTransaksiTiga)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate90FotoTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate90FotoBuktiTransaksiSatu)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate180FotoTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate180FotoBuktiTransaksiSatu)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate270FotoTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate270FotoBuktiTransaksiSatu)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate90FotoTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate90FotoBuktiTransaksiDua)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate180FotoTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate180FotoBuktiTransaksiDua)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate270FotoTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate270FotoBuktiTransaksiDua)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate90FotoTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate90FotoBuktiTransaksiTiga)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate180FotoTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate180FotoBuktiTransaksiTiga)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonRotate270FotoTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormRotate270FotoBuktiTransaksiTiga)).click();
+        }catch (Exception e){
+            System.out.println("Komponen Upload Bukti Transaksi Satu Tidak Ditemukan !!");
+        }
+    }
+
+    public String yGetTextFormVerifikasiValidation()
+    {
+
+        return textFormPageTitle==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFormPageTitle)).getText();
+    }
+
+    public String yGetTextFormVerifikasiNamaNasabah()
+    {
+
+        return textFieldFormNamaNasabah==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFieldFormNamaNasabah)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiNomorHandphone()
+    {
+
+        return textFieldFormNomorHandphone==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFieldFormNomorHandphone)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiNomorRekening()
+    {
+
+        return textFieldFormNomorRekening==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFieldFormNomorRekening)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiPembayaranQRIS()
+    {
+
+        return selectFormQrisPay==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(selectFormQrisPay)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiNominalTransaksi()
+    {
+
+        return textFieldFormNominalTransaksi==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFieldFormNominalTransaksi)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiTanggalTransaksi()
+    {
+
+        return dateFormTanggalTransaksi==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(dateFormTanggalTransaksi)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiNamaMerchant()
+    {
+
+        return selectFormNamaMerchant==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(selectFormNamaMerchant)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiRRN()
+    {
+
+        return textFieldFormRRN==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFieldFormRRN)).getAttribute("value");
+    }
+
+    public String yGetTextFormVerifikasiModal()
+    {
+
+        return textFormModalTitle==null?"":new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                .until(ExpectedConditions.visibilityOf(textFormModalTitle)).getText();
+    }
+
+
+
+//    public void ySelectOptionVerifikasiFormQrisPay(String selected) throws IllegalStateException {
+//        Select select = new Select(selectFormQrisPay);
+//        select.selectByValue(selected);
+//    }
+//
+//    public void ySelectOptionVerifikasiFormNamaMerchant(String selected) throws IllegalStateException {
+//        Select select = new Select(selectFormNamaMerchant);
+//        select.selectByValue(selected);
+//    }
+
+    public void yClickButtonEditFormVerifikasi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormEdit)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Edit Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonSimpanFormVerifikasi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormSimpan)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Simpan Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonCancelFormVerifikasi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormCancel)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Cancel Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonVerifikasiFormVerifikasi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormVerifikasi)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Verifikasi Data Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickButtonSaveNotesFormVerifikasi()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnFormSaveNote)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Save Note Verifikasi Tidak Ditemukan !!");
+        }
+    }
+    public void yClickImageFormVerifikasiFotoBuktiTransaksiSatu()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(imgFormFotoBuktiTransaksiSatu)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Image Foto Transaksi 1 Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickImageFormVerifikasiFotoBuktiTransaksiDua()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(imgFormFotoBuktiTransaksiDua)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Image Foto Transaksi 1 Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickImageFormVerifikasiFotoBuktiTransaksiTiga()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(imgFormFotoBuktiTransaksiTiga)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Image Foto Transaksi 1 Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+
+    public boolean yGetAlertDisabledVerifikasiButton()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnDisabledFormVerifikasi));
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Alert Disabled Button Verifikasi Tidak Ditemukan !!");
+            return false;
+        }
+
+    }
+
+    public boolean yGetAlertDisabledSaveNoteButton()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnDisabledFormSaveNote));
+            return true;
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Alert Disabled Button Save Note Tidak Ditemukan !!");
+            return false;
+        }
+
+    }
+    public void yInputTextSaveNotes(String catatan)
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try{
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNote)).sendKeys(catatan);
+        }catch (Exception e){
+            System.out.println("Komponen Notes Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickModal2Function()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(btnModal2Submit)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Image Foto Transaksi 1 Form Verifikasi Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClearFormVerifikasiNote()
+    {
+
+
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            /** Set Field Password Empty String */
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(textFieldFormNote)).clear();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public WebElement yGetImgFotoBuktiTransaksiSatu()
+    {
+        return imgFormFotoBuktiTransaksiSatu;
+    }
+
+    public WebElement yGetImgFotoBuktiTransaksiDua()
+    {
+        return imgFormFotoBuktiTransaksiDua;
+    }
+
+    public WebElement yGetImgFotoBuktiTransaksiTiga()
+    {
+        return imgFormFotoBuktiTransaksiTiga;
+    }
 
 }

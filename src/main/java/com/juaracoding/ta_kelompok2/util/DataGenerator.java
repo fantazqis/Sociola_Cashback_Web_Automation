@@ -147,7 +147,7 @@ public class DataGenerator {
         while(!isValid){
             try{
                 namaLengkap = faker.name().fullName();
-                matcher = Pattern.compile("^[a-zA-Z\\s?]{6,45}$").matcher(namaLengkap);
+                matcher = Pattern.compile("^[a-zA-Z\\s?]{18,45}$").matcher(namaLengkap);
                 isValid = matcher.find();
                 if(intLoop==250){
                     System.out.println("SUDAH MENCOBA MEMBUAT DATA Nama Lengkap SEBANYAK 15 KALI DAN GAGAL !!");

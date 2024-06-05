@@ -22,7 +22,7 @@ public class OpenCVFunction {
             InputStream in = null;
             File fileOut = null;
             String osName = System.getProperty("os.name");
-            String opencvpath = "C:\\opencv46\\opencv\\build\\java\\";
+            String opencvpath = "D:\\juara_koding\\Tugas_Akhir_Juara_Coding\\opencv\\java";
 
             if (osName.startsWith("Windows")) {
                 int bitness = Integer.parseInt(System.getProperty("sun.arch.data.model"));

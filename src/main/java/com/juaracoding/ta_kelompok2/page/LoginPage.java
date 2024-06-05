@@ -40,6 +40,8 @@ public class LoginPage {
     @FindBy(css = "div.wrap-input100.validate-input.alert-validate[data-validate='Enter password']")
     private WebElement alertLoginEmptyPassword;
 
+
+
     @FindBy(xpath = "//button[@class='login100-form-btn']")
     private WebElement btnLoginSubmit;
 
@@ -124,13 +126,15 @@ public class LoginPage {
         try
         {
             new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
-                    .until(ExpectedConditions.visibilityOf(alertLoginEmptyPassword));
+                    .until(ExpectedConditions.visibilityOf(alertLoginEmptyUsername));
+            return true;
         }
         catch (Exception e)
         {
-            System.out.println("Komponen Alert Login Empty Tidak Ditemukan !!");
+            System.out.println("Komponen Alert Login Empty Username Tidak Ditemukan !!");
+            return false;
         }
-        return true;
+
     }
 
     public boolean getAlertLoginEmptyPassword()
@@ -140,12 +144,14 @@ public class LoginPage {
         {
             new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
                     .until(ExpectedConditions.visibilityOf(alertLoginEmptyPassword));
+            return true;
         }
         catch (Exception e)
         {
-            System.out.println("Komponen Alert Login Empty Tidak Ditemukan !!");
+            System.out.println("Komponen Alert Login Empty Password Tidak Ditemukan !!");
+            return false;
         }
-        return true;
+
     }
 
     public String yGetTextLoginValidation()

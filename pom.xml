@@ -12,6 +12,7 @@
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jdk.version>17</jdk.version>
     </properties>
 
     <dependencies>
@@ -25,7 +26,7 @@
         <dependency>
             <groupId>org</groupId>
             <artifactId>opencv</artifactId>
-            <version>4.6.0</version>
+            <version>4.9.0</version>
         </dependency>
 
         <dependency>
@@ -122,5 +123,50 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <finalName>ta_sociola_irfan</finalName>
+        <plugins>
+            <!-- Set a compiler level -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+
+            <!-- project di build menjadi executeable jar -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <!--                            <mainClass>com.juaracoding.pcmautomation.util.MainExcel</mainClass>-->
+                            <mainClass>com.juaracoding.ta_kelompok2.RunnerAll</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+
+            <!-- memasukkan dependencies ke dalam jar yang sudah di build -->
+            <plugin>
+                <groupId>com.jolira</groupId>
+                <artifactId>onejar-maven-plugin</artifactId>
+                <version>1.4.4</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>one-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
+    </build>
 
 </project>

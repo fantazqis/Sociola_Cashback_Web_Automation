@@ -98,6 +98,48 @@ public class Navbar {
         }
     }
 
+    public void yClickBtnPreTransfer()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(navigationPreTransfer)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Login Submit Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickBtnUploadBuktiTransfer()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(navigationUploadBuktiTransfer)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Login Submit Tidak Ditemukan !!");
+        }
+    }
+
+    public void yClickBtnFinance()
+    {
+        GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        try
+        {
+            new WebDriverWait(driver, Duration.ofSeconds(Constants.TIMEOUT_DELAY))
+                    .until(ExpectedConditions.visibilityOf(navigationFinance)).click();
+        }
+        catch (Exception e)
+        {
+            System.out.println("Komponen Tombol Login Submit Tidak Ditemukan !!");
+        }
+    }
+
     public void yClickBtnLogout()
     {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
