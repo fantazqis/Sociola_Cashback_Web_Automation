@@ -12,7 +12,7 @@ Feature: Positif Test Table Pre Transfer
       | Nama Customer  |
       | Nomor Handphone  |
       | RRN  |
-      | Reference ID  |
+      | Nama Customer  |
 
   Scenario: Test203 Testing Pencarian Data Empty Web Table Pre Transfer
     When Test203 Klik Navbar Pre Transfer
@@ -55,7 +55,7 @@ Feature: Positif Test Table Pre Transfer
     When Test208 Klik Navbar Pre Transfer
     Then Test208 Validasi Label Halaman Pre Transfer
     And Test208 Pilih Option Show Entries <data>
-    Then Test158 Validasi Banyak Data Yang Ditampilkan
+    Then Test208 Validasi Banyak Data Yang Ditampilkan
 
     Examples:
       | data |
@@ -67,7 +67,7 @@ Feature: Positif Test Table Pre Transfer
   Scenario: Test209 Testing Export Excel Table Pre Transfer
     When Test209 Klik Navbar Pre Transfer
     Then Test209 Validasi Label Halaman Pre Transfer
-    And Test209 Klik Tombol Export Excel <data>
+    And Test209 Klik Tombol Export Excel
     Then Test209 Validasi Banyak Data Yang Ditampilkan
     When Test209 Klik Navbar Logout
     And Test209 Clear Field username dan password
@@ -85,5 +85,5 @@ Feature: Positif Test Table Pre Transfer
 
 
     Examples:
-      | username  | password | data |
-      | feriansyah  | a  | Nama Customer  |
+      | username  | password |
+      | feriansyah  | a  |

@@ -53,6 +53,7 @@ public class NegatifTestTableVerifikasi {
     @When("Test161 Klik Navbar Verifikasi")
     public void test161_klik_navbar_verifikasi() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        //new LoginToHomeFunction(driver, Constants.VERIFIKATOR_USERNAME, Constants.VERIFIKATOR_PASSWORD);
         navbar.yClickBtnVerifikasi();
 
         extentTest.log(LogStatus.PASS, "Test161 Klik Navbar Verifikasi");
@@ -130,7 +131,7 @@ public class NegatifTestTableVerifikasi {
     public void test163_menginput_data_valid_dengan_spasi_di_depan(String data) {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         dataToSearch = "       " + verifikasiPage.yGetRandomTableDataString(data);
-        System.out.println("ini datatosearch negatif: "+dataToSearch);
+ //       System.out.println("ini datatosearch negatif: "+dataToSearch);
         verifikasiPage.yInputSearchBarVerifikasi(dataToSearch);
 
         extentTest.log(LogStatus.PASS, "Test163 Menginput data Valid Dengan Spasi Di Depan");
@@ -191,7 +192,7 @@ public class NegatifTestTableVerifikasi {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         dataToSearch = verifikasiPage.yGetRandomTableDataString(data) + "      ";
         verifikasiPage.yInputSearchBarVerifikasi(dataToSearch);
-        System.out.println(dataToSearch + "negatif spasi belakang");
+//        System.out.println(dataToSearch + "negatif spasi belakang");
         extentTest.log(LogStatus.PASS, "Test165 Menginput data Valid Dengan Banyak Spasi Di Belakang");
     }
 

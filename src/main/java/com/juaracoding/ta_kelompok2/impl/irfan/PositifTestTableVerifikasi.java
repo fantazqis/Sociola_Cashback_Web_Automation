@@ -125,6 +125,7 @@ public class PositifTestTableVerifikasi {
     public void test154_menginput_data_valid(String data) {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         dataToSearch = verifikasiPage.yGetRandomTableDataString(data);
+        verifikasiPage.yInputSearchBarVerifikasi(dataToSearch);
 
         extentTest.log(LogStatus.PASS, "Test154 Menginput data Valid");
     }
@@ -183,8 +184,8 @@ public class PositifTestTableVerifikasi {
     public void test155_menginput_empty_string() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         allTableData = verifikasiPage.yGetAllDataTableData();
-        System.out.println("ini hasil penyimpanan");
-        System.out.println(allTableData);
+//        System.out.println("ini hasil penyimpanan");
+//        System.out.println(allTableData);
 
         verifikasiPage.yInputSearchBarVerifikasi("");
 

@@ -161,7 +161,7 @@ public class PreTransferPage {
                 for (int j = startIndex; j < endIndex; j++) {
                     WebElement cell = cells.get(j);
                     String currentCellText = cell.getText();
-                    System.out.println("perbandingan data: " + allTableData.get(i) + " dengan " + currentCellText);
+                    //System.out.println("perbandingan data: " + allTableData.get(i) + " dengan " + currentCellText);
                     if (!allTableData.get(i).equals(currentCellText)) {
                         System.out.println("Validation failed! Expected: " + allTableData.get(i) + ", Actual: " + currentCellText);
                         return false;
@@ -254,7 +254,7 @@ public class PreTransferPage {
         if (process == "valid" || process == "partial") {
             for (WebElement data : allData) {
                 String value = data.getText();
-                System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                //System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
                 if (value.contains(dataTovalidate)) {
                     System.out.println("found " + process + " value: " + value + "data to validat: " + dataTovalidate);
                     dataStatus = true;
@@ -264,7 +264,7 @@ public class PreTransferPage {
         } else if (process == "inconsistent") {
             for (WebElement data : allData) {
                 String value = data.getText();
-                System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
+                //System.out.println("process " + process + " value: " + value + "data to validat: " + dataTovalidate);
                 if (value.toLowerCase().contains(dataTovalidate.toLowerCase())) {
                     System.out.println("Found " + process + " value: " + value + "data to validat: " + dataTovalidate);
                     dataStatus = true;

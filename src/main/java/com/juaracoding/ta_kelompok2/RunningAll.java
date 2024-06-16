@@ -4,8 +4,6 @@ import io.cucumber.core.cli.Main;
 
 public class RunningAll {
     public static void main(String[] args) {
-        System.out.println("ARGS[0] ---> "+args[0]);
-        System.out.println("ARGS[1] ---> "+args[1]);
 //        int loop = Integer.parseInt(args[0]);
 ////        int loop = 2;
 //        for (int i = 0; i < loop; i++) {

@@ -12,9 +12,10 @@ Feature: Positif Test Table Finance
     Examples:
       | data |
       | Reference ID  |
-#      | Nomor Handphone  |
-#      | RRN  |
-#      | Reference ID  |
+      | Nama Customer |
+      | Nomor Handphone  |
+      | RRN  |
+
 
   Scenario: Test213 Testing Pencarian Data Empty Web Table Finance
     When Test213 Klik Navbar Finance
@@ -37,9 +38,9 @@ Feature: Positif Test Table Finance
     Examples:
       | data |
       | Nama Customer |
-#      | Nama Customer |
-#      | Reference ID  |
-#      | Reference ID  |
+      | Nama Customer |
+      | Reference ID  |
+      | Reference ID  |
 
   Scenario: Test217 Testing Pencarian Partial Match Web Table Finance
     When Test217 Klik Navbar Finance
@@ -53,9 +54,9 @@ Feature: Positif Test Table Finance
     Examples:
       | data |
       | Nama Customer  |
-#      | Nomor Handphone  |
-#      | RRN  |
-#      | Reference ID  |
+      | Nomor Handphone  |
+      | RRN  |
+      | Reference ID  |
 
 
   Scenario: Test218 Testing Menampilkan Banyak Entries Data Web Table Finance
@@ -67,9 +68,9 @@ Feature: Positif Test Table Finance
     Examples:
       | data |
       | 10  |
-#      | 25  |
-#      | 50  |
-#      | 100  |
+      | 25  |
+      | 50  |
+      | 100  |
 
   Scenario: Test219 Testing Tombol Upload Sudah Transfer Dan Kembalikan Ke Verifikator
     When Test219 Klik Navbar Finance

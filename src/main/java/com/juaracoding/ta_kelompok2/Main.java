@@ -7,6 +7,7 @@ import com.juaracoding.ta_kelompok2.util.OpenCVFunction;
 public class Main {
 
     public static void main(String[] args) {
+
 //        SociolaRotateImage sociolaRotateImage = new SociolaRotateImage();
 //        sociolaRotateImage.eksekusi();
 

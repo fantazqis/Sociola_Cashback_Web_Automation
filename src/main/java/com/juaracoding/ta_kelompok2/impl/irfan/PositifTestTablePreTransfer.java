@@ -83,6 +83,8 @@ public class PositifTestTablePreTransfer {
     public void test201_menginput_data_valid(String data) {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         dataToSearch = preTransferPage.yGetRandomTableDataString(data);
+        dataToSearchStatic = dataToSearch;
+        preTransferPage.yInputSearchBarPreTransfer(dataToSearch);
 
         extentTest.log(LogStatus.PASS, "Test201 Menginput data Valid");
     }
@@ -126,8 +128,8 @@ public class PositifTestTablePreTransfer {
     public void test203_menginput_empty_string() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         allTableData = preTransferPage.yGetAllDataTableData();
-        System.out.println("ini hasil penyimpanan");
-        System.out.println(allTableData);
+//        System.out.println("ini hasil penyimpanan");
+//        System.out.println(allTableData);
 
         preTransferPage.yInputSearchBarPreTransfer("");
 
@@ -148,7 +150,7 @@ public class PositifTestTablePreTransfer {
         boolean validasi = preTransferPage.yGetAllDataTableDataCompare(allTableData);
         Assert.assertTrue(validasi);
 
-        System.out.println("ini validasi " + validasi);
+//        System.out.println("ini validasi " + validasi);
         extentTest.log(LogStatus.PASS, "Test203 Validasi Banyak Data");
     }
 
@@ -287,7 +289,7 @@ public class PositifTestTablePreTransfer {
     public void test208_validasi_banyak_data_yang_ditampilkan() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         int validasi = preTransferPage.yGetDataTableRowTotal();
-        System.out.println("perbandingan validasi : " + validasi + " dan " + entriesData);
+//        System.out.println("perbandingan validasi : " + validasi + " dan " + entriesData);
 //        Assert.assertEquals(validasi, entriesData);
 
         extentTest.log(LogStatus.PASS, "Test208 Validasi Banyak Data Yang Ditampilkan");
@@ -312,20 +314,23 @@ public class PositifTestTablePreTransfer {
         extentTest.log(LogStatus.PASS, "Test209 Validasi Label Halaman Pre Transfer");
     }
 
-    @And("^Test209 Klik Tombol Export Excel(.*)$")
-    public void test209_klik_tombol_export_excel_data(String data) {
+    @And("Test209 Klik Tombol Export Excel")
+    public void test209_klik_tombol_export_excel() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
-        dataToSearchStatic = preTransferPage.yGetRandomTableDataString(data);
+//        dataToSearchStatic = preTransferPage.yGetRandomTableDataString(data);
         System.out.println("data search static: " + dataToSearchStatic);
         GlobalFunction.delay(1);
         preTransferPage.clickBtnExportExcel();
         System.out.println("3");
-        extentTest.log(LogStatus.PASS, "Test209 Klik Tombol Export Excel data");
+        extentTest.log(LogStatus.PASS, "Test209 Klik Tombol Export Excel");
     }
 
     @Then("Test209 Validasi Banyak Data Yang Ditampilkan")
     public void test209_validasi_banyak_data_yang_ditampilkan() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
+        GlobalFunction.delay(1);
+        navbar.yClickBtnPreTransfer();
+        GlobalFunction.delay(1);
         System.out.println("4");
         extentTest.log(LogStatus.PASS, "Test209 Validasi Banyak Data Yang Ditampilkan");
     }

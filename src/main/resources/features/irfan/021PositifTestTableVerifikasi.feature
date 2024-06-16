@@ -24,9 +24,9 @@ Feature: Positif Test Table Verifikasi
     Examples:
       | data |
       | Nama Customer  |
-#      | Nomor Handphone  |
-#      | RRN  |
-#      | Reference ID  |
+      | Nomor Handphone  |
+      | RRN  |
+      | Reference ID  |
 
   Scenario: Test155 Testing Pencarian Data Empty Web Table Verifikasi
     When Test155 Klik Navbar Verifikasi
@@ -49,9 +49,9 @@ Feature: Positif Test Table Verifikasi
     Examples:
       | data |
       | Nama Customer |
-#      | Nama Customer |
-#      | Reference ID  |
-#      | Reference ID  |
+      | Nama Customer |
+      | Reference ID  |
+      | Reference ID  |
 
   Scenario: Test157 Testing Pencarian Partial Match Web Table Verifikasi
     When Test157 Klik Navbar Verifikasi
@@ -65,9 +65,9 @@ Feature: Positif Test Table Verifikasi
     Examples:
       | data |
       | Nama Customer  |
-#      | Nomor Handphone  |
-#      | RRN  |
-#      | Reference ID  |
+      | Nomor Handphone  |
+      | RRN  |
+      | Reference ID  |
 
 
   Scenario: Test158 Testing Menampilkan Banyak Entries Data Web Table Verifikasi
@@ -79,6 +79,6 @@ Feature: Positif Test Table Verifikasi
     Examples:
       | data |
       | 10  |
-#      | 25  |
-#      | 50  |
-#      | 100  |
+      | 25  |
+      | 50  |
+      | 100  |

@@ -26,12 +26,13 @@ public class VerifikatorFinanceOutlineHooks {
     public static ExtentTest extentTest;
     public static ExtentReports reports = new ExtentReports(GlobalFunction.rootProject+"/practiceautomation-report/extentreport/login.html");
     private static VerifikatorFinanceTesting[] tests = VerifikatorFinanceTesting.values();
-    private static final int[] DATA_OUTLINE = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 4, 4, 5, 4, 4, 1, 4, 1, 4, 1, 5, 4, 4, 1, 4, 1, 5, 4, 4, 1, 1, 4, 1, 5, 4, 4, 1, 1, 1, };
+    private static final int[] DATA_OUTLINE = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 4, 4, 5, 4, 4, 5, 4, 1, 4, 1, 5, 4, 4, 1, 4, 1, 5, 4, 4, 1, 1, 4, 1, 5, 4, 4, 1, 1, 1};
+    //1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 4, 4, 4, 5, 4, 4, 5, 4, 1, 4, 1, 5, 4, 4, 1, 4, 1, 5, 4, 4, 1, 1, 4, 1, 5, 4, 4, 1, 1, 1,
     private String testReport = "";
 
     @Before
     public void setUp() {
-        DriverSingleton.getInstance(Constants.FIREFOX);
+        DriverSingleton.getInstance(Constants.CHROME);
         driver = DriverSingleton.getDriver();
         testReport = tests[GlobalFunction.testCount].getTestName();
         extentTest = reports.startTest(testReport);

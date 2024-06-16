@@ -16,6 +16,7 @@ import com.juaracoding.ta_kelompok2.page.Navbar;
 import com.juaracoding.ta_kelompok2.page.PreTransferPage;
 import com.juaracoding.ta_kelompok2.page.VerifikasiPage;
 import com.juaracoding.ta_kelompok2.util.GlobalFunction;
+import com.juaracoding.ta_kelompok2.util.DataGenerator;
 import com.juaracoding.ta_kelompok2.util.OpenCVFunction;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
@@ -30,6 +31,7 @@ import org.testng.Assert;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 import static com.juaracoding.ta_kelompok2.util.GlobalFunction.delay;
 
@@ -47,6 +49,10 @@ public class PositifTestFormVerifikasi {
     private VerifikasiPage verifikasiPage;
 
     private PreTransferPage preTransferPage;
+
+    private DataGenerator dataGenerator = new DataGenerator();
+
+    private Random r = new Random();
 
     public String dataToSearch = "";
 
@@ -85,7 +91,7 @@ public class PositifTestFormVerifikasi {
     public void test171_klik_navbar_verifikasi() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         System.out.println("1 Valid Form Verifikasi Run");
-//        new LoginToHomeFunction(driver, Constants.VERIFIKATOR_USERNAME, Constants.VERIFIKATOR_PASSWORD);
+       //new LoginToHomeFunction(driver, Constants.VERIFIKATOR_USERNAME, Constants.VERIFIKATOR_PASSWORD);
         windowsParent = driver.getWindowHandle();
         navbar.yClickBtnVerifikasi();
 
@@ -222,8 +228,9 @@ public class PositifTestFormVerifikasi {
     @And("^Test171 Input Field Nama Nasabah (.*)$")
     public void test171_input_field_nama_nasabah_namanasabah(String namanasabah) {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
-        tempNamaNasabah = namanasabah;
-        verifikasiPage.yInputTextFieldNamaNasabah(namanasabah);
+//        tempNamaNasabah = namanasabah;
+        tempNamaNasabah = dataGenerator.dataNamaLengkap();
+        verifikasiPage.yInputTextFieldNamaNasabah(tempNamaNasabah);
 
         System.out.println("13");
         extentTest.log(LogStatus.PASS, "Test171 Input Field Nama Nasabah namanasabah");
@@ -286,8 +293,9 @@ public class PositifTestFormVerifikasi {
     @And("^Test171 Input Field RRN (.*)$")
     public void test171_input_field_rrn_rrn(String rrn) {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
-        tempRRN = rrn;
-        verifikasiPage.yInputTextFieldRRN(rrn);
+//        tempRRN = rrn;
+        tempRRN = String.valueOf(r.nextLong(1000000000000L,9999999999999999L));
+        verifikasiPage.yInputTextFieldRRN(tempRRN);
         System.out.println("20");
         extentTest.log(LogStatus.PASS, "Test171 Input Field RRN RRN");
     }
@@ -447,14 +455,14 @@ public class PositifTestFormVerifikasi {
     @Then("Test171 Validasi Data Berhasil dirubah")
     public void test171_validasi_data_berhasil_dirubah() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
-//        System.out.println("Temp: " + tempNamaNasabah + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNamaNasabah());
-//        System.out.println("Temp: " + tempNomorHandphone + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNomorHandphone());
-//        System.out.println("Temp: " + tempNomorRekening + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNomorRekening());
-//        System.out.println("Temp: " + tempPembayaranQRIS + " dan real: " + verifikasiPage.yGetTextFormVerifikasiPembayaranQRIS());
-//        System.out.println("Temp: " + tempNominalTransaksi + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNominalTransaksi());
-//        System.out.println("Temp: " + tempTanggalTransaksi + " dan real: " + verifikasiPage.yGetTextFormVerifikasiTanggalTransaksi());
-//        System.out.println("Temp: " + tempNamaMerchant + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNamaMerchant());
-//        System.out.println("Temp: " + tempRRN + " dan real: " + verifikasiPage.yGetTextFormVerifikasiRRN());
+        System.out.println("Temp: " + tempNamaNasabah + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNamaNasabah());
+        System.out.println("Temp: " + tempNomorHandphone + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNomorHandphone());
+        System.out.println("Temp: " + tempNomorRekening + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNomorRekening());
+        System.out.println("Temp: " + tempPembayaranQRIS + " dan real: " + verifikasiPage.yGetTextFormVerifikasiPembayaranQRIS());
+        System.out.println("Temp: " + tempNominalTransaksi + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNominalTransaksi());
+        System.out.println("Temp: " + tempTanggalTransaksi + " dan real: " + verifikasiPage.yGetTextFormVerifikasiTanggalTransaksi());
+        System.out.println("Temp: " + tempNamaMerchant + " dan real: " + verifikasiPage.yGetTextFormVerifikasiNamaMerchant());
+        System.out.println("Temp: " + tempRRN + " dan real: " + verifikasiPage.yGetTextFormVerifikasiRRN());
 //        Boolean validasi = (
 //                tempNamaNasabah.equals(verifikasiPage.yGetTextFormVerifikasiNamaNasabah()) &&
 //                tempNomorHandphone.equals(verifikasiPage.yGetTextFormVerifikasiNomorHandphone()) &&

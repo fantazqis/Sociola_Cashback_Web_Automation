@@ -11,11 +11,11 @@ Feature: Negatif Test Table Verifikasi
 
     Examples:
       | data |
-      | Valentinus Nurdiansyah |
-      | Danang Kusumawardhana |
-      | Pradipta Candrawijaya |
-      | Yudhistira Wijanarko |
-      | Bagas Kusumawardhana |
+      | Valentinus Nurdiansyah Saputra |
+      | Danang Kusumawardhana Syaiful |
+      | Pradipta Candrawijaya Kusuma|
+      | Yudhistira Wijanarko Jaya|
+      | Bagas Kusumawardhana Priadi|
 
   Scenario: Test163 Testing Pencarian Data Valid Dengan Banyak Spasi Di Depan Web Table Verifikasi
     When Test163 Klik Navbar Verifikasi

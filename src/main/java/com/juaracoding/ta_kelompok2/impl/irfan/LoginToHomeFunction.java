@@ -30,7 +30,7 @@ public class LoginToHomeFunction {
         loginPage.inputTextFieldInputPassword(password);
         GlobalFunction.delay(1);
         loginPage.clickBtnLoginSubmit();
-        GlobalFunction.delay(1);
+        GlobalFunction.delay(2);
 
     }
 

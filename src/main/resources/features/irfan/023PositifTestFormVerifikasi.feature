@@ -37,8 +37,12 @@ Feature: Positif Test Form Verifikasi
     Then Test171 Validasi Data Berhasil dirubah
 
     Examples:
-      | data          | namanasabah     | nomorhandphone| nomorrekening| pembayaranqris     | nominaltransaksi | tanggaltransaksi| namamerchant| RRN        |
-      | Reference ID  | Nisa Taslim     | 082251267573  | 84231795621  | Bca Mobile Sakuku  | 480.000          | 05/27/2024      | SOCIOLLA    | 351111165 |
+      | data          | namanasabah     | nomorhandphone| nomorrekening| pembayaranqris     | nominaltransaksi | tanggaltransaksi | namamerchant| RRN      |
+      |Reference ID   |	Budiansyah Rahmat	    | 081312345678  | 123456789012 | MyBca              |	120.000	       |05/28/2024        |	SOCIOLLA    |	1774876632|
+      |Reference ID   |	Anisa Lestari	    | 085765432109  | 987654321098 | Bca Mobile Sakuku  |	350.000	       |05/29/2024        |	SOCIOLLA    |	9667654345467   |
+      |Reference ID   | Cicin Maulidan	| 082198765432  | 09876543210  |	MyBca           |	750.000	       |05/30/2024        |	SOCIOLLA    |	3685555522222  |
+      |Reference ID   |	Dimas Adi Pratama   | 085678901234  | 10987654321  | Bca Mobile Sakuku  |	200.000	       |06/01/2024        |	SOCIOLLA    |	987777751111  |
+      |Reference ID   |	Retno Asari       | 081234567890  | 11123456789  |	MyBca           |	500.000        |06/02/2024        |	SOCIOLLA    |	98663344444   |
 
 
   Scenario: Test179 Testing Save Note Table verifikasi

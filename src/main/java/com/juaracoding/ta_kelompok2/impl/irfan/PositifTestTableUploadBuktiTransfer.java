@@ -132,8 +132,8 @@ public class PositifTestTableUploadBuktiTransfer {
     public void test233_menginput_empty_string() {
         GlobalFunction.delay(Constants.TIMEOUT_DELAY);
         allTableData = uploadBuktiTransferPage.yGetAllDataTableData();
-        System.out.println("ini hasil penyimpanan");
-        System.out.println(allTableData);
+//        System.out.println("ini hasil penyimpanan");
+//        System.out.println(allTableData);
 
         uploadBuktiTransferPage.yInputSearchBarUploadBuktiTransfer("");
 
